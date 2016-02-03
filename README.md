@@ -11,6 +11,7 @@ Authors
 * Alejandro Rodríguez
 * Carlos Lubián
 * Adrián Jiménez
+* Víctor Castaño
 
 
 
