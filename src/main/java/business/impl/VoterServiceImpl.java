@@ -9,8 +9,9 @@ public class VoterServiceImpl implements VoterService {
 	private CommandExecutor executor = new CommandExecutor();
 	
 	@Override
-	public User getVoterInfo(User user) {
-		return (User) executor.execute(new GetUserInfoCommand(user));
+	public User getVoterInfo(String dni, String passwd) {
+		return (User) executor.execute(
+				new GetUserInfoCommand(dni, passwd));
 	}
 
 	@Override

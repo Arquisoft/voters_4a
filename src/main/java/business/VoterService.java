@@ -4,6 +4,6 @@ import model.User;
 
 public interface VoterService {
 
-	User getVoterInfo(User user);
+	User getVoterInfo(String dni, String passwd);
 	void updatePassword(); 
 }

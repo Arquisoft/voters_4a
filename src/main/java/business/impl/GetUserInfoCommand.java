@@ -1,20 +1,20 @@
 package business.impl;
 
 import business.Command;
-import model.User;
-import persistence.util.Jpa;
+import persistence.UserFinder;
 
 public class GetUserInfoCommand implements Command {
 	
-	private User user;
+	private String dni;
+	private String passwd;
 	
-	public GetUserInfoCommand(User user) {
-		this.user = user;
+	public GetUserInfoCommand(String dni, String passwd) {
+		this.dni = dni;
+		this.passwd = passwd;
 	}
 
 	@Override
 	public Object execute() {
-		Jpa.getManager().persist(user);
-		return user;
+		return UserFinder.findUser(dni, passwd);
 	}
 }
