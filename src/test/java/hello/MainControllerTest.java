@@ -3,7 +3,10 @@ package hello;
 import static org.junit.Assert.assertEquals;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,8 +36,7 @@ public class MainControllerTest {
     private URL base;
 	private RestTemplate template;
 
-	@Before
-	public void setUp() throws Exception {
+	private void setUp() throws Exception {
 		this.base = new URL("http://localhost:" + port + "/");
 		template = new TestRestTemplate();
 		
@@ -43,13 +45,28 @@ public class MainControllerTest {
 					"Password"+i, "Dni"+i));
 		}
 	}
-
 	@Test
 	public void exitenVotantes() throws Exception {
+		setUp();
 		for (int i = 0; i < NUM_VOTER; i++) {
 			assertEquals("Nombre"+i, repository.findByEmailAndPassword("Email"+i,
 					"Password"+i).getNombre());
 		}
+		repository.deleteAll();
+	}
+	@Test
+	public void updatePassword() throws Exception {
+		setUp();
+		assertEquals(4,repository.count());
+		Voter votante = repository.findByEmailAndPassword("Email1",
+				"Password1");
+		assertEquals("Nombre1", votante.getNombre());
+		votante.setPassword("12");
+		votante=repository.save(votante);
+		assertEquals(4,repository.count());
+		assertEquals(votante, repository.findByEmailAndPassword("Email1",
+				"12"));
+		repository.deleteAll();
 	}
 }
 
