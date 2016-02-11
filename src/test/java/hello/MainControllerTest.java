@@ -1,7 +1,6 @@
 package hello;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertEquals;
 
 import java.net.URL;
 
@@ -13,10 +12,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.TestRestTemplate;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -30,6 +29,7 @@ public class MainControllerTest {
     @Autowired
     private VoterRepository repository;
 
+    private static final int NUM_VOTER = 4;
     private URL base;
 	private RestTemplate template;
 
@@ -37,10 +37,44 @@ public class MainControllerTest {
 	public void setUp() throws Exception {
 		this.base = new URL("http://localhost:" + port + "/");
 		template = new TestRestTemplate();
+		
+		for (int i = 0; i < NUM_VOTER; i++) {
+			repository.save(new Voter("Nombre"+i, "Email"+i, 
+					"Password"+i, "Dni"+i));
+		}
 	}
 
 	@Test
-	public void getLanding() throws Exception {
-		
+	public void exitenVotantes() throws Exception {
+		for (int i = 0; i < NUM_VOTER; i++) {
+			assertEquals("Nombre"+i, repository.findByEmailAndPassword("Email"+i,
+					"Password"+i).getNombre());
+		}
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

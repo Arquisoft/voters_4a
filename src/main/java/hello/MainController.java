@@ -17,7 +17,7 @@ public class MainController {
     
     @RequestMapping(value="/user", method=RequestMethod.POST)
     @ResponseBody
-    private ResponseEntity<EmailCodigoVoter> pruebaPost(
+    private ResponseEntity<EmailCodigoVoter> findUserPasswordEmail(
     		@RequestBody EmailPassVoter voterdto) {
     	
     	GetVoter voterAccess = new GetVoterImpl();
