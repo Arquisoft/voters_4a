@@ -1,19 +1,34 @@
 package hello;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-@RestController
+@Controller
 public class MainController {
-
-    @RequestMapping("/user")
-    public UserInfo user() {
-        return new UserInfo("pepe",0);
-    }
-
-    @RequestMapping("/")
-    public String landing() {
-        return "User Management Service";
+	
+	@Autowired
+	private VoterRepository voterRepo;
+    
+    @RequestMapping(value="/user", method=RequestMethod.POST)
+    @ResponseBody
+    private ResponseEntity<EmailCodigoVoter> pruebaPost(
+    		@RequestBody EmailPassVoter voterdto) {
+    	
+    	GetVoter voterAccess = new GetVoterImpl();
+    	Voter tmps = voterAccess.findVoter(voterRepo, voterdto.getEmail(),
+    			voterdto.getPassword());
+    
+    	if (tmps != null)
+    		return new ResponseEntity<EmailCodigoVoter>(new EmailCodigoVoter(
+    				tmps.getEmail(), tmps.getColegioelectoral()), 
+    				HttpStatus.ACCEPTED);
+    	else
+    		return new ResponseEntity<EmailCodigoVoter>(HttpStatus.BAD_REQUEST);
     }
 }
