@@ -1,4 +1,6 @@
-package hello;
+package hello.DBRepository;
+
+import hello.Model.Voter;
 
 public interface GetVoter {
 

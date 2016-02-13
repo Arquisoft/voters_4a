@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +20,15 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
 
+import hello.DBRepository.VoterRepository;
+import hello.Model.Voter;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @IntegrationTest({"server.port=0"})
-public class MainControllerTest {
+public class VoterRepositoryTest {
 
     @Value("${local.server.port}")
     private int port;
@@ -33,30 +37,30 @@ public class MainControllerTest {
     private VoterRepository repository;
 
     private static final int NUM_VOTER = 4;
-    private URL base;
-	private RestTemplate template;
 
-	private void setUp() throws Exception {
-		this.base = new URL("http://localhost:" + port + "/");
-		template = new TestRestTemplate();
-		
+	@Before
+	public void setUpBefore() throws Exception {
 		for (int i = 0; i < NUM_VOTER; i++) {
 			repository.save(new Voter("Nombre"+i, "Email"+i, 
 					"Password"+i, "Dni"+i));
 		}
 	}
+	
+	@After
+	public void setUpAfter() throws Exception {
+		repository.deleteAll();
+	}
+	
 	@Test
-	public void exitenVotantes() throws Exception {
-		setUp();
+	public void testExist() throws Exception {
 		for (int i = 0; i < NUM_VOTER; i++) {
 			assertEquals("Nombre"+i, repository.findByEmailAndPassword("Email"+i,
 					"Password"+i).getNombre());
 		}
-		repository.deleteAll();
 	}
+	
 	@Test
-	public void updatePassword() throws Exception {
-		setUp();
+	public void testUpdate() throws Exception {
 		assertEquals(4,repository.count());
 		Voter votante = repository.findByEmailAndPassword("Email1",
 				"Password1");
@@ -66,7 +70,6 @@ public class MainControllerTest {
 		assertEquals(4,repository.count());
 		assertEquals(votante, repository.findByEmailAndPassword("Email1",
 				"12"));
-		repository.deleteAll();
 	}
 }
 
