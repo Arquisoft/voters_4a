@@ -25,12 +25,11 @@ public class VoterController {
     @RequestMapping(value="/user", method=RequestMethod.POST)
     @ResponseBody
     private ResponseEntity<EmailCodigoVoter> findUserPasswordEmail(
-    		@RequestBody EmailPassVoter voterdto) {
-    	voterRepo.save(new Voter("Jose", "jose@gmail.com", "jj", "1234"));
+    		@RequestBody EmailPassVoter voterdto) {   	
     	GetVoter voterAccess = new GetVoterImpl();
     	Voter tmps = voterAccess.findVoter(voterRepo, voterdto.getEmail(),
     			voterdto.getPassword());
-    
+    	
     	if (tmps != null)
     		return new ResponseEntity<EmailCodigoVoter>(new EmailCodigoVoter(
     				tmps.getEmail(), tmps.getColegioelectoral()), 
@@ -39,9 +38,4 @@ public class VoterController {
     		return new ResponseEntity<EmailCodigoVoter>(HttpStatus.BAD_REQUEST);
     }
     
-    @RequestMapping(value="/prueba", method=RequestMethod.GET)
-    @ResponseBody
-    private String prueba() {
-    	return "Ola";
-    }
 }

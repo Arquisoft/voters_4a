@@ -5,6 +5,14 @@ public class EmailPassVoter {
 	private String email;
 	private String password;
 	
+	public EmailPassVoter(String email, String password) {
+		super();
+		this.email = email;
+		this.password = password;
+	}
+	
+	public EmailPassVoter() { }
+	
 	public String getEmail() {
 		return email;
 	}
@@ -21,6 +29,4 @@ public class EmailPassVoter {
 	public String toString() {
 		return "VoterDto [email=" + email + ", password=" + password + "]";
 	}
-	
-	
 }
