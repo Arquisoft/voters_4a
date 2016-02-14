@@ -13,6 +13,7 @@ import hello.DBRepository.GetVoter;
 import hello.DBRepository.VoterRepository;
 import hello.DBRepository.Impl.GetVoterImpl;
 import hello.Model.EmailCodigoVoter;
+import hello.Model.EmailPassPassVoter;
 import hello.Model.EmailPassVoter;
 import hello.Model.Voter;
 
@@ -36,6 +37,21 @@ public class VoterController {
     				HttpStatus.ACCEPTED);
     	else
     		return new ResponseEntity<EmailCodigoVoter>(HttpStatus.BAD_REQUEST);
+    }
+    @RequestMapping(value="/password", method=RequestMethod.POST)
+    @ResponseBody
+    private ResponseEntity<EmailPassVoter> changeUserPassword(
+    		@RequestBody EmailPassPassVoter voterdto) {   	
+    	GetVoter voterAccess = new GetVoterImpl();
+    	Boolean correct = voterAccess.ChangePasswordVoter(voterRepo, voterdto.getEmail(),
+    			voterdto.getOldPassword(), voterdto.getNewPassword());
+    	
+    	if (correct == true)
+    		return new ResponseEntity<EmailPassVoter>(new EmailPassVoter(
+    				voterdto.getEmail(), voterdto.getNewPassword()), 
+    				HttpStatus.ACCEPTED);
+    	else
+    		return new ResponseEntity<EmailPassVoter>(HttpStatus.BAD_REQUEST);
     }
     
 }

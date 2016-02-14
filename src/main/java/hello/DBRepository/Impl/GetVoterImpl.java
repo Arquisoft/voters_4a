@@ -13,4 +13,15 @@ public class GetVoterImpl implements GetVoter {
 	
 	}
 
+	@Override
+	public Boolean ChangePasswordVoter(VoterRepository voterRepo, String email, String oldPassword, String newPassword) {
+		Voter voter = findVoter(voterRepo,email,oldPassword);
+		if(voter!=null){
+			voter.setPassword(newPassword);
+			voterRepo.save(voter);
+			return true;
+		}
+		return false;
+	}
+
 }

@@ -73,4 +73,27 @@ public class VoterControllerTest {
 		.content("{\"email\":\"noexiste\", \"password\": \"noexiste\"}")
 		).andExpect(status().is(400));
 	}
+	
+	@Test
+	public void testChangePasswordOK() throws Exception {
+		repository.save(new Voter("Jose", "j","j", "1234")); 
+		assertEquals(1, repository.count());
+		
+		mockMvc
+		.perform(post("/password")
+		.contentType(MediaType.APPLICATION_JSON)
+		.content("{\"email\":\"j\", \"oldPassword\": \"j\", \"newPassword\": \"r\"}")
+		).andExpect(status().is(202));
+	}
+	@Test
+	public void testChangePasswordFalse() throws Exception {
+		repository.save(new Voter("Jose", "j","j", "1234")); 
+		assertEquals(1, repository.count());
+		
+		mockMvc
+		.perform(post("/password")
+		.contentType(MediaType.APPLICATION_JSON)
+		.content("{\"email\":\"j\", \"oldPassword\": \"p\", \"newPassword\": \"z\"}")
+		).andExpect(status().is(400));
+	}
 }
