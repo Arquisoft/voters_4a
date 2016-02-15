@@ -1,6 +1,6 @@
-package hello.DBRepository;
+package asw.DBRepository;
 
-import hello.Model.Voter;
+import asw.Model.Voter;
 
 public interface GetVoter {
 

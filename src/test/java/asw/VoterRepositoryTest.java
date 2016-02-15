@@ -1,4 +1,4 @@
-package hello;
+package asw;
 
 import static org.junit.Assert.assertEquals;
 
@@ -13,8 +13,8 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import hello.DBRepository.VoterRepository;
-import hello.Model.Voter;
+import asw.DBRepository.VoterRepository;
+import asw.Model.Voter;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)

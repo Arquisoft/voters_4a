@@ -1,9 +1,9 @@
-package hello.DBRepository;
+package asw.DBRepository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Component;
 
-import hello.Model.Voter;
+import asw.Model.Voter;
 
 @Component("repo")
 public interface VoterRepository extends CrudRepository<Voter, Long>{

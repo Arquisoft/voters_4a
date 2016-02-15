@@ -1,4 +1,4 @@
-package hello;
+package asw;
 
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -19,8 +19,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import hello.DBRepository.VoterRepository;
-import hello.Model.Voter;
+import asw.DBRepository.VoterRepository;
+import asw.Model.Voter;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -71,6 +71,18 @@ public class VoterControllerTest {
 		.perform(post("/user")
 		.contentType(MediaType.APPLICATION_JSON)
 		.content("{\"email\":\"noexiste\", \"password\": \"noexiste\"}")
+		).andExpect(status().is(400));
+	}
+	
+	@Test
+	public void testWrongPassword() throws Exception {
+		repository.save(new Voter("Jose", "emailJose","j", "1234")); 
+		assertEquals(1, repository.count());
+		
+		mockMvc
+		.perform(post("/user")
+		.contentType(MediaType.APPLICATION_JSON)
+		.content("{\"email\":\"emailJose\", \"password\": \"jj\"}")
 		).andExpect(status().is(400));
 	}
 	

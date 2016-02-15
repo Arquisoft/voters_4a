@@ -1,4 +1,4 @@
-package hello.Controller;
+package asw.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import hello.DBRepository.GetVoter;
-import hello.DBRepository.VoterRepository;
-import hello.DBRepository.Impl.GetVoterImpl;
-import hello.Model.EmailCodigoVoter;
-import hello.Model.EmailPassPassVoter;
-import hello.Model.EmailPassVoter;
-import hello.Model.Voter;
+import asw.DBRepository.GetVoter;
+import asw.DBRepository.VoterRepository;
+import asw.DBRepository.Impl.GetVoterImpl;
+import asw.Model.EmailCodigoVoter;
+import asw.Model.EmailPassPassVoter;
+import asw.Model.EmailPassVoter;
+import asw.Model.Voter;
 
 @Controller
 public class VoterController {
@@ -26,7 +26,7 @@ public class VoterController {
     @RequestMapping(value="/user", method=RequestMethod.POST)
     @ResponseBody
     private ResponseEntity<EmailCodigoVoter> findUserPasswordEmail(
-    		@RequestBody EmailPassVoter voterdto) {   	
+    		@RequestBody EmailPassVoter voterdto) {
     	GetVoter voterAccess = new GetVoterImpl();
     	Voter tmps = voterAccess.findVoter(voterRepo, voterdto.getEmail(),
     			voterdto.getPassword());
@@ -38,6 +38,7 @@ public class VoterController {
     	else
     		return new ResponseEntity<EmailCodigoVoter>(HttpStatus.BAD_REQUEST);
     }
+	
     @RequestMapping(value="/password", method=RequestMethod.POST)
     @ResponseBody
     private ResponseEntity<EmailPassVoter> changeUserPassword(

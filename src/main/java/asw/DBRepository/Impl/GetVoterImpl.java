@@ -1,8 +1,8 @@
-package hello.DBRepository.Impl;
+package asw.DBRepository.Impl;
 
-import hello.DBRepository.GetVoter;
-import hello.DBRepository.VoterRepository;
-import hello.Model.Voter;
+import asw.DBRepository.GetVoter;
+import asw.DBRepository.VoterRepository;
+import asw.Model.Voter;
 
 public class GetVoterImpl implements GetVoter {
 	

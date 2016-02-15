@@ -1,4 +1,4 @@
-package hello.Model;
+package asw.Model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
