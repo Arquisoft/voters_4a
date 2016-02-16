@@ -52,19 +52,56 @@ public class VoterControllerTest {
 		repository.deleteAll();
 	}
 	
+	
+	/**
+	 * Método que comprueba que el email y contraseña enviados para la consulta 
+	 * pertenecen a un votante que existe y está en nuestro repositorio.
+	 * @throws Exception
+	 */
 	@Test
 	public void testVoterExists() throws Exception {
 		
+	//--Se crea el votante y se añade al repositorio.
 		repository.save(new Voter("Jose", "j","j", "1234")); 
+		
+	//--Se comprueba que se añade al repositorio
 		assertEquals(1, repository.count());
 		
+	//--Comprobamos que el votante existe y tiene el formato adecuado.
 		mockMvc
 		.perform(post("/user")
 		.contentType(MediaType.APPLICATION_JSON)
 		.content("{\"email\":\"j\", \"password\": \"j\"}")
 		).andExpect(status().is(202));
+		
+		
+	//--Más pruebas con diferentes votantes
+	
+	//------------
+		repository.save(new Voter("Bernardo", "bernardin@uniovi.es","3s70", "76355422B")); 
+		assertEquals(2, repository.count());
+		
+		mockMvc
+		.perform(post("/user")
+		.contentType(MediaType.APPLICATION_JSON)
+		.content("{\"email\":\"bernardin@uniovi.es\", \"password\": \"3s70\"}")
+		).andExpect(status().is(202));
+	//-------------
+		repository.save(new Voter("Luis", "ludu@outlook.es","ruffles", "76687742C")); 
+		assertEquals(3, repository.count());
+		
+		mockMvc
+		.perform(post("/user")
+		.contentType(MediaType.APPLICATION_JSON)
+		.content("{\"email\":\"ludu@outlook.es\", \"password\": \"ruffles\"}")
+		).andExpect(status().is(202));
 	}
 	
+	/**
+	 * Método que comprueba que se devuelve un error al 
+	 * intentar enviar una dirección de un votante que no existe.
+	 * @throws Exception
+	 */
 	@Test
 	public void testVoterNoExists() throws Exception {
 		mockMvc
@@ -74,6 +111,12 @@ public class VoterControllerTest {
 		).andExpect(status().is(400));
 	}
 	
+	/**
+	 * Método que comprueba que se devuelve un error al 
+	 * intentar enviar una contraseña incorrecta asociada 
+	 * al correo de un votante.
+	 * @throws Exception
+	 */
 	@Test
 	public void testWrongPassword() throws Exception {
 		repository.save(new Voter("Jose", "emailJose","j", "1234")); 
@@ -86,26 +129,60 @@ public class VoterControllerTest {
 		).andExpect(status().is(400));
 	}
 	
+	/**
+	 * Método que comprueba que se realiza el cambio 
+	 * de contraseña de un votante correctamente.
+	 * @throws Exception
+	 */
 	@Test
 	public void testChangePasswordOK() throws Exception {
 		repository.save(new Voter("Jose", "j","j", "1234")); 
 		assertEquals(1, repository.count());
 		
+		//Realizamos el cambio de contraseña
 		mockMvc
 		.perform(post("/password")
 		.contentType(MediaType.APPLICATION_JSON)
 		.content("{\"email\":\"j\", \"oldPassword\": \"j\", \"newPassword\": \"r\"}")
 		).andExpect(status().is(202));
+		
+		//Comprobamos que se ha realizado el cambio de contraseña
+		
+		mockMvc
+		.perform(post("/user")
+		.contentType(MediaType.APPLICATION_JSON)
+		.content("{\"email\":\"j\", \"password\": \"r\"}")
+		).andExpect(status().is(202));
+		
 	}
+	
+	/**
+	 * Método que comprueba que se devuelve un error al 
+	 * intentar cambiar la contraseña asociada a un votante 
+	 * la contraseña actual introducida es incorrecta.
+	 * @throws Exception
+	 */
 	@Test
 	public void testChangePasswordFalse() throws Exception {
+		
 		repository.save(new Voter("Jose", "j","j", "1234")); 
 		assertEquals(1, repository.count());
 		
+		//Le pasamos una contraseña actual incorrecta.
 		mockMvc
 		.perform(post("/password")
 		.contentType(MediaType.APPLICATION_JSON)
 		.content("{\"email\":\"j\", \"oldPassword\": \"p\", \"newPassword\": \"z\"}")
 		).andExpect(status().is(400));
+		
+		//Funciona correctamente con la contraseña actual correcta
+		mockMvc
+		.perform(post("/password")
+		.contentType(MediaType.APPLICATION_JSON)
+		.content("{\"email\":\"j\", \"oldPassword\": \"j\", \"newPassword\": \"z\"}")
+		).andExpect(status().is(202));
 	}
+	
+
+	
 }

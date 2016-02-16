@@ -31,6 +31,12 @@ public class VoterRepositoryTest {
 
     private static final int NUM_VOTER = 4;
 
+    
+	/**
+	 * Método para introducir NUM_VOTER 
+	 * votantes en el repositorio antes de cada test.
+	 * @throws Exception
+	 */
 	@Before
 	public void setUpBefore() throws Exception {
 		for (int i = 0; i < NUM_VOTER; i++) {
@@ -39,11 +45,21 @@ public class VoterRepositoryTest {
 		}
 	}
 	
+	/**
+	 * Método para vaciar el repositorio después de cada test.
+	 * @throws Exception
+	 */
 	@After
 	public void setUpAfter() throws Exception {
 		repository.deleteAll();
 	}
 	
+	
+	/**
+	 * Método que comprueba que se añaden correctamente
+	 * votantes al repositorio.
+	 * @throws Exception
+	 */
 	@Test
 	public void testExist() throws Exception {
 		for (int i = 0; i < NUM_VOTER; i++) {
@@ -52,22 +68,35 @@ public class VoterRepositoryTest {
 		}
 	}
 	
+	/**
+	 * Método que comprueba que se actualiza correctamente
+	 * la información de un votante.
+	 * @throws Exception
+	 */
 	@Test
 	public void testUpdate() throws Exception {
 		assertEquals(NUM_VOTER,repository.count());
+		//Obtenemos un votante.
 		Voter votante = repository.findByEmailAndPassword("Email1",
 				"Password1");
 		assertEquals("Nombre1", votante.getNombre());
+		//Modificamos un atributo del votante y lo actualizamos. 
 		votante.setPassword("12");
 		votante=repository.save(votante);
 		assertEquals(4,repository.count());
+		//Comprobamos la actualización.
 		assertEquals(votante, repository.findByEmailAndPassword("Email1",
 				"12"));
 	}
 	
+	/**
+	 * Método que comprueba que un votante elimina correctamente.
+	 * @throws Exception
+	 */
 	@Test
 	public void testDelete() throws Exception {
 		assertEquals(NUM_VOTER,repository.count());
+		//Eliminamos un votante y comprobamos que se ha eliminado en cada iteración.
 		for (int i = 0; i < NUM_VOTER; i++) {
 			repository.delete(repository.findByEmailAndPassword("Email"+i,
 					"Password"+i));
