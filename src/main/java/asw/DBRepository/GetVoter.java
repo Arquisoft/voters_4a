@@ -21,7 +21,9 @@ public interface GetVoter {
 	 * @param email, email del votante a buscar.
 	 * @param oldPassword, contraseña actual del votante.
 	 * @param newPassword, contraseña que se le va a asignar al votante.
-	 * @return True, en caso de que el cambio se realice correctamente, False en caso contrario.
+	 * @return True, en caso de que el cambio se realice correctamente, False 
+	 * en caso contrario.
 	 */
-	Boolean ChangePasswordVoter(VoterRepository voterRepo, String email, String oldPassword, String newPassword);
+	Boolean ChangePasswordVoter(VoterRepository voterRepo, String email, 
+			String oldPassword, String newPassword);
 }

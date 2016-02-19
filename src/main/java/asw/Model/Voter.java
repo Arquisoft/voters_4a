@@ -41,6 +41,16 @@ public class Voter {
 		this.password = password;
 		this.dni = dni;
 	}
+	
+	public Voter(String nombre, String email, String password, String dni,
+			long colegioelectoral) {
+		super();
+		this.email = email;
+		this.nombre = nombre;
+		this.password = password;
+		this.dni = dni;
+		this.colegioelectoral = colegioelectoral;
+	}
 
 	/**
 	 * Método de acceso a la propiedad nombre de la clase Voter.

@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,15 +24,56 @@ public class VoterController {
 	
 	@Autowired
 	private VoterRepository voterRepo;
+	
+	/* Parte opcional de cambiar password */
+	@RequestMapping(value="/cambiarPass", method=RequestMethod.GET)
+    public String cambiarPassForm(Model model) {
+		voterRepo.save(new Voter("jose", "jose", "jose", "jose"));
+        model.addAttribute("cambiarPass", new EmailPassPassVoter());
+        return "nuevaPass";
+    }
+
+    @RequestMapping(value="/cambiarPass", method=RequestMethod.POST)
+    public String cambiarPassSubmit(@ModelAttribute EmailPassPassVoter voterdto, 
+    		Model model) {
+
+		model.addAttribute("voterdto", voterdto);
+		
+    	if (cambiarPassword(voterdto) == true) 
+            return "passChanged";
+    	return "errorPassChanged";
+    }
+   
+    /* Parte opcional: meter html para el acceso a votar */
+    @RequestMapping(value="/", method=RequestMethod.GET)
+    public String votarForm(Model model) {
+		voterRepo.save(new Voter("jose", "jose", "jose", "jose", 102));
+        model.addAttribute("emailpass", new EmailPassVoter());
+        return "votar";
+    }
+    
+    @RequestMapping(value="/", method=RequestMethod.POST)
+    public String votarFormSubmit(@ModelAttribute EmailPassVoter voterdto, 
+    		Model model) {
+
+    	Voter tmps = votar(voterdto);
+    	if (tmps != null) {
+    		model.addAttribute("resultado", new EmailCodigoVoter(
+    				tmps.getEmail(), tmps.getColegioelectoral()));
+    		return "votarSuccess";
+    	}
+    	else {
+    		model.addAttribute("resultado", voterdto);
+    		return "votarError";
+    	}
+    }
     
     @RequestMapping(value="/user", method=RequestMethod.POST)
     @ResponseBody
     private ResponseEntity<EmailCodigoVoter> findUserPasswordEmail(
     		@RequestBody EmailPassVoter voterdto) {
-    	GetVoter voterAccess = new GetVoterImpl();
-    	Voter tmps = voterAccess.findVoter(voterRepo, voterdto.getEmail(),
-    			voterdto.getPassword());
     	
+    	Voter tmps = votar(voterdto);
     	if (tmps != null)
     		return new ResponseEntity<EmailCodigoVoter>(new EmailCodigoVoter(
     				tmps.getEmail(), tmps.getColegioelectoral()), 
@@ -43,16 +86,25 @@ public class VoterController {
     @ResponseBody
     private ResponseEntity<EmailPassVoter> changeUserPassword(
     		@RequestBody EmailPassPassVoter voterdto) {   	
-    	GetVoter voterAccess = new GetVoterImpl();
-    	Boolean correct = voterAccess.ChangePasswordVoter(voterRepo, voterdto.getEmail(),
-    			voterdto.getOldPassword(), voterdto.getNewPassword());
     	
-    	if (correct == true)
+    	if (cambiarPassword(voterdto) == true)
     		return new ResponseEntity<EmailPassVoter>(new EmailPassVoter(
     				voterdto.getEmail(), voterdto.getNewPassword()), 
     				HttpStatus.ACCEPTED);
     	else
     		return new ResponseEntity<EmailPassVoter>(HttpStatus.BAD_REQUEST);
+    }
+    
+    private Voter votar(EmailPassVoter voterdto) {
+    	GetVoter voterAccess = new GetVoterImpl();
+    	return voterAccess.findVoter(voterRepo, voterdto.getEmail(),
+    			voterdto.getPassword());
+    }
+    
+    private boolean cambiarPassword(EmailPassPassVoter voterdto) {
+    	GetVoter voterAccess = new GetVoterImpl();
+    	return voterAccess.ChangePasswordVoter(voterRepo, voterdto.getEmail(),
+    			voterdto.getOldPassword(), voterdto.getNewPassword());
     }
     
 }
