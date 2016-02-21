@@ -1,5 +1,7 @@
 package asw.Model;
 
+import asw.util.MD5;
+
 public class EmailPassPassVoter {
 	
 	private String email;
@@ -15,8 +17,8 @@ public class EmailPassPassVoter {
 	public EmailPassPassVoter(String email, String oldPassword,String newPassword) {
 		super();
 		this.email = email;
-		this.oldPassword = oldPassword;
-		this.newPassword = newPassword;
+		this.oldPassword = MD5.getMD5(oldPassword);
+		this.newPassword = MD5.getMD5(newPassword);
 	}
 	
 	/**

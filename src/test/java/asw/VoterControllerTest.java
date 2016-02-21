@@ -65,7 +65,7 @@ public class VoterControllerTest {
 	public void testVoterExists() throws Exception {
 		
 	//--Se crea el votante y se añade al repositorio.
-		repository.save(new Voter("Jose", "j","j", "1234")); 
+		repository.save(new Voter("Jose", "j","jose", "1234")); 
 		
 	//--Se comprueba que se añade al repositorio
 		assertEquals(1, repository.count());
@@ -74,7 +74,7 @@ public class VoterControllerTest {
 		mockMvc
 		.perform(post("/user")
 		.contentType(MediaType.APPLICATION_JSON)
-		.content("{\"email\":\"j\", \"password\": \"j\"}")
+		.content("{\"email\":\"j\", \"password\": \"jose\"}")
 		).andExpect(status().is(202));
 		
 		
@@ -139,14 +139,14 @@ public class VoterControllerTest {
 	 */
 	@Test
 	public void testChangePasswordOK() throws Exception {
-		repository.save(new Voter("Jose", "j","j", "1234")); 
+		repository.save(new Voter("Jose", "j","jose", "jose")); 
 		assertEquals(1, repository.count());
 		
 		//Realizamos el cambio de contraseña
 		mockMvc
 		.perform(post("/password")
 		.contentType(MediaType.APPLICATION_JSON)
-		.content("{\"email\":\"j\", \"oldPassword\": \"j\", \"newPassword\": \"r\"}")
+		.content("{\"email\":\"j\", \"oldPassword\": \"jose\", \"newPassword\": \"r\"}")
 		).andExpect(status().is(202));
 		
 		//Comprobamos que se ha realizado el cambio de contraseña

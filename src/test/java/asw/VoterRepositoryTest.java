@@ -18,6 +18,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import asw.DBRepository.VoterRepository;
 import asw.Model.Voter;
+import asw.util.MD5;
 
 @ActiveProfiles(profiles="test")
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -67,7 +68,7 @@ public class VoterRepositoryTest {
 	public void testExist() throws Exception {
 		for (int i = 0; i < NUM_VOTER; i++) {
 			assertEquals("Nombre"+i, repository.findByEmailAndPassword("Email"+i,
-					"Password"+i).getNombre());
+					MD5.getMD5("Password"+i)).getNombre());
 		}
 	}
 	
@@ -81,7 +82,7 @@ public class VoterRepositoryTest {
 		assertEquals(NUM_VOTER,repository.count());
 		//Obtenemos un votante.
 		Voter votante = repository.findByEmailAndPassword("Email1",
-				"Password1");
+				MD5.getMD5("Password1"));
 		assertEquals("Nombre1", votante.getNombre());
 		//Modificamos un atributo del votante y lo actualizamos. 
 		votante.setPassword("12");
@@ -102,7 +103,7 @@ public class VoterRepositoryTest {
 		//Eliminamos un votante y comprobamos que se ha eliminado en cada iteración.
 		for (int i = 0; i < NUM_VOTER; i++) {
 			repository.delete(repository.findByEmailAndPassword("Email"+i,
-					"Password"+i));
+					MD5.getMD5("Password"+i)));
 			assertEquals(NUM_VOTER-i-1, repository.count());
 		}
 	}

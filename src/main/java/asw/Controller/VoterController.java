@@ -18,6 +18,7 @@ import asw.Model.EmailCodigoVoter;
 import asw.Model.EmailPassPassVoter;
 import asw.Model.EmailPassVoter;
 import asw.Model.Voter;
+import asw.util.MD5;
 
 @Controller
 public class VoterController {
@@ -28,7 +29,6 @@ public class VoterController {
 	/* Parte opcional de cambiar password */
 	@RequestMapping(value="/cambiarPass", method=RequestMethod.GET)
     public String cambiarPassForm(Model model) {
-		voterRepo.save(new Voter("jose", "jose", "jose", "jose"));
         model.addAttribute("cambiarPass", new EmailPassPassVoter());
         return "nuevaPass";
     }
@@ -47,7 +47,6 @@ public class VoterController {
     /* Parte opcional: meter html para el acceso a votar */
     @RequestMapping(value="/", method=RequestMethod.GET)
     public String votarForm(Model model) {
-		voterRepo.save(new Voter("jose", "jose", "jose", "jose", 102));
         model.addAttribute("emailpass", new EmailPassVoter());
         return "votar";
     }
@@ -98,13 +97,13 @@ public class VoterController {
     private Voter votar(EmailPassVoter voterdto) {
     	GetVoter voterAccess = new GetVoterImpl();
     	return voterAccess.findVoter(voterRepo, voterdto.getEmail(),
-    			voterdto.getPassword());
+    			MD5.getMD5(voterdto.getPassword()));
     }
     
     private boolean cambiarPassword(EmailPassPassVoter voterdto) {
     	GetVoter voterAccess = new GetVoterImpl();
     	return voterAccess.ChangePasswordVoter(voterRepo, voterdto.getEmail(),
-    			voterdto.getOldPassword(), voterdto.getNewPassword());
+    			MD5.getMD5(voterdto.getOldPassword()), MD5.getMD5(voterdto.getNewPassword()));
     }
     
 }

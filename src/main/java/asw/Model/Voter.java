@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
+import asw.util.MD5;
+
 @Entity
 public class Voter {
 
@@ -38,7 +40,7 @@ public class Voter {
 		super();
 		this.email = email;
 		this.nombre = nombre;
-		this.password = password;
+		this.password =  MD5.getMD5(password);
 		this.dni = dni;
 	}
 	
@@ -47,7 +49,7 @@ public class Voter {
 		super();
 		this.email = email;
 		this.nombre = nombre;
-		this.password = password;
+		this.password = MD5.getMD5(password);
 		this.dni = dni;
 		this.colegioelectoral = colegioelectoral;
 	}
