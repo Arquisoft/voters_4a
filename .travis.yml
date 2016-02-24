@@ -3,7 +3,6 @@ jdk:
 - oraclejdk8
 before_install:
     - pip install --user codecov
-    - pip install codecov
 
 after_success:
   - codecov
