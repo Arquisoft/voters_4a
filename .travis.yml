@@ -2,8 +2,8 @@ language: java
 jdk:
 - oraclejdk8
 before_install:
-  - pip install codecov
+   pip install codecov
 after_success:
-  - codecov
+   codecov
 
 sudo: required
