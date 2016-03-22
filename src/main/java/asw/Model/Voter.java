@@ -21,7 +21,7 @@ public class Voter {
 	private String dni;
 	@NotNull
 	private String email;
-	private int edad;
+	
 	private long colegioelectoral;
 	
 	/**
@@ -44,16 +44,6 @@ public class Voter {
 		this.dni = dni;
 	}
 	
-	public Voter(String nombre, String email, String password, String dni,
-			long colegioelectoral) {
-		super();
-		this.email = email;
-		this.nombre = nombre;
-		this.password = MD5.getMD5(password);
-		this.dni = dni;
-		this.colegioelectoral = colegioelectoral;
-	}
-
 	/**
 	 * Método de acceso a la propiedad nombre de la clase Voter.
 	 * @return String con el nombre del votante.
@@ -62,20 +52,7 @@ public class Voter {
 		return nombre;
 	}
 
-	/** Método de modificación de la propiedad nombre de la clase voter.
-	 * @param nombre, String con el nombre del votante.
-	 */
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
-	/**
-	 * Método de acceso a la propiedad password de la clase Voter.
-	 * @return String con la contraseña del votante.
-	 */
-	public String getPassword() {
-		return password;
-	}
+	
 
 	/**
 	 * Método de modificación de la propiedad password de la clase voter.
@@ -92,29 +69,7 @@ public class Voter {
 		return email;
 	}
 
-	/**
-	 * Método de modificación de la propiedad email de la clase voter.
-	 * @param email, String con el email del votante.
-	 */
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	/**
-	 * Método de acceso a la propiedad edad de la clase Voter.
-	 * @return Entero con la edad del votante.
-	 */
-	public int getEdad() {
-		return edad;
-	}
-
-	/**
-	 * Método de modificación de la propiedad edad de la clase voter.
-	 * @param edad, entero con la edad del votante.
-	 */
-	public void setEdad(int edad) {
-		this.edad = edad;
-	}
+	
 
 	/**
 	 * Método de acceso a la propiedad colegioelectoral de la clase Voter.
@@ -179,14 +134,5 @@ public class Voter {
 		} else if (!dni.equals(other.dni))
 			return false;
 		return true;
-	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", nombre=" + nombre + ", password=" + password + ", email=" + email + ", dni=" + dni
-				+ ", edad=" + edad + ", colegioelectoral=" + colegioelectoral + "]";
 	}
 }
