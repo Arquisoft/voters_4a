@@ -2,7 +2,9 @@ package asw;
 
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import org.junit.After;
 import org.junit.Before;
@@ -12,13 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -186,6 +188,88 @@ public class VoterControllerTest {
 		).andExpect(status().is(202));
 	}
 	
+	//Test para los formularios HTML
+	
+	@Test
+	public void testPasswordHTMLFormFallo() throws Exception {
+		repository.save(new Voter("Jose", "emailJose","j", "1234")); 
+		assertEquals(1, repository.count());
+		
+		RequestBuilder request = post("/cambiarPass")
+		        .param("email", "emailJose")
+		        .param("oldPassword", "ja")
+				.param("newPassword", "nueva");
+
+		    mockMvc
+		        .perform(request)
+		        .andDo(MockMvcResultHandlers.print())
+		        .andExpect(view().name("errorPassChanged"));
+	}
+	
+	@Test
+	public void testPasswordHTMLFormAcierto() throws Exception {
+		repository.save(new Voter("Jose", "emailJose","j", "1234")); 
+		assertEquals(1, repository.count());
+		
+		RequestBuilder request = post("/cambiarPass")
+		        .param("email", "emailJose")
+		        .param("oldPassword", "j")
+				.param("newPassword", "nueva");
+
+		    mockMvc
+		        .perform(request)
+		        .andDo(MockMvcResultHandlers.print())
+		        .andExpect(view().name("passChanged"));
+	}
+	
+	@Test
+	public void testVotoHTMLFormAcierto() throws Exception {
+		repository.save(new Voter("Jose", "emailJose","j", "1234")); 
+		assertEquals(1, repository.count());
+		
+		RequestBuilder request = post("/")
+		        .param("email", "emailJose")
+		        .param("password", "j");
+
+		    mockMvc
+		        .perform(request)
+		        .andDo(MockMvcResultHandlers.print())
+		        .andExpect(view().name("votarSuccess"));
+		    
+	}
+	
+	@Test
+	public void testVotoHTMLFormFallo() throws Exception {
+		repository.save(new Voter("Jose", "emailJose","j", "1234")); 
+		assertEquals(1, repository.count());
+		
+		RequestBuilder request = post("/")
+		        .param("email", "emailJose")
+		        .param("password", "passErronea");
+
+		    mockMvc
+		        .perform(request)
+		        .andDo(MockMvcResultHandlers.print())
+		        .andExpect(view().name("votarError"));
+		    
+	}
+	
+	@Test
+	public void testGETMethods() throws Exception {
+		
+		RequestBuilder request = get("/cambiarPass");
+	    mockMvc
+	        .perform(request)
+	        .andDo(MockMvcResultHandlers.print())
+	        .andExpect(view().name("nuevaPass"));
+	    
+	    request = get("/");
+	    mockMvc
+	        .perform(request)
+	        .andDo(MockMvcResultHandlers.print())
+	        .andExpect(view().name("votar"));
+		    
+	}
 
 	
 }
