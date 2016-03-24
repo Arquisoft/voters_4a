@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -86,11 +84,17 @@ public class VoterRepositoryTest {
 		assertEquals("Nombre1", votante.getNombre());
 		//Modificamos un atributo del votante y lo actualizamos. 
 		votante.setPassword("12");
+		votante.setDNI("1234");
+		votante.setColegioelectoral(200);
 		votante=repository.save(votante);
 		assertEquals(4,repository.count());
 		//Comprobamos la actualización.
 		assertEquals(votante, repository.findByEmailAndPassword("Email1",
 				"12"));
+		assertEquals("1234", repository.findByEmailAndPassword("Email1",
+				"12").getDni());
+		assertEquals(200, repository.findByEmailAndPassword("Email1",
+				"12").getColegioelectoral());
 	}
 	
 	/**

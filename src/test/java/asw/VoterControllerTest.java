@@ -1,8 +1,11 @@
 package asw;
 
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -20,7 +23,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -67,7 +69,8 @@ public class VoterControllerTest {
 	public void testVoterExists() throws Exception {
 		
 	//--Se crea el votante y se añade al repositorio.
-		repository.save(new Voter("Jose", "j","jose", "1234")); 
+		Voter votante = new Voter("Jose", "j","jose", "1234");
+		repository.save(votante); 
 		
 	//--Se comprueba que se añade al repositorio
 		assertEquals(1, repository.count());
@@ -81,8 +84,6 @@ public class VoterControllerTest {
 		
 		
 	//--Más pruebas con diferentes votantes
-	
-	//------------
 		repository.save(new Voter("Bernardo", "bernardin@uniovi.es","3s70", "76355422B")); 
 		assertEquals(2, repository.count());
 		
@@ -202,7 +203,7 @@ public class VoterControllerTest {
 
 		    mockMvc
 		        .perform(request)
-		        .andDo(MockMvcResultHandlers.print())
+		        .andExpect(model().attribute("voterdto", hasProperty("email", is("emailJose"))))
 		        .andExpect(view().name("errorPassChanged"));
 	}
 	
@@ -218,13 +219,17 @@ public class VoterControllerTest {
 
 		    mockMvc
 		        .perform(request)
-		        .andDo(MockMvcResultHandlers.print())
+		        .andExpect(model().attribute("voterdto", hasProperty("email", is("emailJose"))))
+		        .andExpect(model().attribute("voterdto", hasProperty("oldPassword", is("j"))))
+		        .andExpect(model().attribute("voterdto", hasProperty("newPassword", is("nueva"))))
 		        .andExpect(view().name("passChanged"));
 	}
 	
 	@Test
 	public void testVotoHTMLFormAcierto() throws Exception {
-		repository.save(new Voter("Jose", "emailJose","j", "1234")); 
+		Voter votante = new Voter("Jose", "emailJose","j", "1234");
+		votante.setColegioelectoral(450);
+		repository.save(votante); 
 		assertEquals(1, repository.count());
 		
 		RequestBuilder request = post("/")
@@ -233,7 +238,8 @@ public class VoterControllerTest {
 
 		    mockMvc
 		        .perform(request)
-		        .andDo(MockMvcResultHandlers.print())
+		        .andExpect(model().attribute("resultado", hasProperty("email", is("emailJose"))))
+		        .andExpect(model().attribute("resultado", hasProperty("colegioelectoral", is(450L))))
 		        .andExpect(view().name("votarSuccess"));
 		    
 	}
@@ -249,7 +255,7 @@ public class VoterControllerTest {
 
 		    mockMvc
 		        .perform(request)
-		        .andDo(MockMvcResultHandlers.print())
+		        .andExpect(model().attribute("resultado", hasProperty("email", is("emailJose"))))
 		        .andExpect(view().name("votarError"));
 		    
 	}
@@ -260,13 +266,11 @@ public class VoterControllerTest {
 		RequestBuilder request = get("/cambiarPass");
 	    mockMvc
 	        .perform(request)
-	        .andDo(MockMvcResultHandlers.print())
 	        .andExpect(view().name("nuevaPass"));
 	    
 	    request = get("/");
 	    mockMvc
 	        .perform(request)
-	        .andDo(MockMvcResultHandlers.print())
 	        .andExpect(view().name("votar"));
 		    
 	}

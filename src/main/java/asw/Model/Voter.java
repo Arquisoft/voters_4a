@@ -104,6 +104,10 @@ public class Voter {
 	public String getDni() {
 		return dni;
 	}
+	
+	public void setDNI(String dni) {
+		this.dni = dni;
+	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()

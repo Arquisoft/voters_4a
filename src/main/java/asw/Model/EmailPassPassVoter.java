@@ -1,25 +1,10 @@
 package asw.Model;
 
-import asw.util.MD5;
-
 public class EmailPassPassVoter {
 	
 	private String email;
 	private String oldPassword;
 	private String newPassword;
-	
-	/**
-	 * Constructor de la clase EmailPassPassVoter.
-	 * @param email, email del votante.
-	 * @param oldPassword, contraseña del votante que se va a sustituir. 
-	 * @param newPassword, contraseña por la que se va a reemplazar la existente.
-	 */
-	public EmailPassPassVoter(String email, String oldPassword,String newPassword) {
-		super();
-		this.email = email;
-		this.oldPassword = MD5.getMD5(oldPassword);
-		this.newPassword = MD5.getMD5(newPassword);
-	}
 	
 	/**
 	 * Constructor de la clase EmailPassPassVoter sin parámetros.
