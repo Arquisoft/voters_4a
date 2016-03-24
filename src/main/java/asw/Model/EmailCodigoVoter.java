@@ -6,23 +6,6 @@ public class EmailCodigoVoter {
 	private String email;
 	
 	/**
-	 * Constructor de la clase EmailCodigoVoter.
-	 * @param email, email del votante.
-	 * @param colegioelectoral, colegio electoral del votante correspondiente.
-	 */
-	public EmailCodigoVoter(String email, long colegioelectoral) {
-		this.email = email;
-		this.colegioelectoral = colegioelectoral;
-	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "EmailCodigoVoter [colegioelectoral=" + colegioelectoral + ", email=" + email + "]";
-	}
-	
-	/**
 	 * Método de acceso a la propiedad colegioelectoral de la clase Voter.
 	 * @return Long con el numero del colegio electoral correspondiente
 	 * al votante.

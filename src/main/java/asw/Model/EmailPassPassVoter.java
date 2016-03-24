@@ -58,12 +58,4 @@ public class EmailPassPassVoter {
 	public void setNewPassword(String newPassword) {
 		this.newPassword = newPassword;
 	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "VoterDto [email=" + email + ", oldPassword=" + oldPassword + "newPassword=" + newPassword + "]";
-	}
 }

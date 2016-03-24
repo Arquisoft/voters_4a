@@ -54,12 +54,4 @@ public class EmailPassVoter {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "VoterDto [email=" + email + ", password=" + password + "]";
-	}
 }

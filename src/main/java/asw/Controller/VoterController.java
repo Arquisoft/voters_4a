@@ -57,8 +57,10 @@ public class VoterController {
 
     	Voter tmps = votar(voterdto);
     	if (tmps != null) {
-    		model.addAttribute("resultado", new EmailCodigoVoter(
-    				tmps.getEmail(), tmps.getColegioelectoral()));
+    		EmailCodigoVoter ecv = new EmailCodigoVoter();
+    		ecv.setColegioelectoral(tmps.getColegioelectoral());
+    		ecv.setEmail(tmps.getEmail());
+    		model.addAttribute("resultado", ecv);
     		return "votarSuccess";
     	}
     	else {
@@ -73,10 +75,12 @@ public class VoterController {
     		@RequestBody EmailPassVoter voterdto) {
     	
     	Voter tmps = votar(voterdto);
-    	if (tmps != null)
-    		return new ResponseEntity<EmailCodigoVoter>(new EmailCodigoVoter(
-    				tmps.getEmail(), tmps.getColegioelectoral()), 
-    				HttpStatus.ACCEPTED);
+    	if (tmps != null) {
+    		EmailCodigoVoter ecv = new EmailCodigoVoter();
+    		ecv.setColegioelectoral(tmps.getColegioelectoral());
+    		ecv.setEmail(tmps.getEmail());
+    		return new ResponseEntity<EmailCodigoVoter>(ecv, HttpStatus.ACCEPTED);
+    	}
     	else
     		return new ResponseEntity<EmailCodigoVoter>(HttpStatus.BAD_REQUEST);
     }
